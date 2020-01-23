@@ -238,14 +238,17 @@ func (h *Histogram) RecordValues(v, n int64) error {
 	return nil
 }
 
-// ValueAtQuantile returns the recorded value at the given quantile (0..100).
-func (h *Histogram) ValueAtQuantile(q float64) int64 {
+// ValueAtPercentile returns the recorded value at the given quantile (0..100).
+func (h *Histogram) ValueAtPercentile(q float64) int64 {
 	if q > 100 {
 		q = 100
 	}
 
 	total := int64(0)
 	countAtPercentile := int64(((q / 100) * float64(h.totalCount)) + 0.5)
+	if countAtPercentile < 1 {
+		countAtPercentile = 1
+	}
 
 	i := h.iterator()
 	for i.next() {
