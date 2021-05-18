@@ -333,6 +333,9 @@ func (h *Histogram) ValueAtPercentile(percentile float64) int64 {
 
 	total := int64(0)
 	countAtPercentile := int64(((percentile / 100) * float64(h.totalCount)) + 0.5)
+	if countAtPercentile < 1 {
+		countAtPercentile = 1
+	}
 
 	i := h.iterator()
 	for i.next() {
